@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="DataScience &amp; Machine Learning Solutions" />
+
+
+<title>Datos Presupuestarios por Institucón</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.18/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Propuesta para el Banco Central de Honduras</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Presentación</a>
+</li>
+<li>
+  <a href="sector_real.html">PIB Enfoque VA</a>
+</li>
+<li>
+  <a href="Enfoque_gasto.html">PIB Enfoque Gasto</a>
+</li>
+<li>
+  <a href="Inflacion.html">Inflación e IPC</a>
+</li>
+<li>
+  <a href="BP.html">Balanza de Pagos</a>
+</li>
+<li>
+  <a href="principales_ind.html">Principales Indicadores Fiscales</a>
+</li>
+<li>
+  <a href="Deuda.html">Deuda</a>
+</li>
+<li>
+  <a href="Impuestos_trib.html">Impuestos Tributarios</a>
+</li>
+<li>
+  <a href="Tablas.html">Presupuesto Comparativo</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Datos Presupuestarios por Institucón</h1>
+<h4 class="author">DataScience &amp; Machine Learning Solutions</h4>
+<h4 class="date">14/10/2021</h4>
+
+</div>
+
+
+<p>Presupuesto por Institución 2021 versus Proyecto 2022</p>
+<div id="htmlwidget-e365de9de172dd28c7f8" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e365de9de172dd28c7f8">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119"],["1","40","43","80","300","301","500","505","516","2","26","50","60","62","240","242","244","504","508","512","511","701","702","703","708","3","28","35","37","39","51","100","102","104","130","140","141","145","150","170","290","310","501","503","506","514","515","601","602","603","604","605","806","807","901","902","903","950","4","22","31","33","61","120","123","144","153","241","801","803","804","805","808","809","5","25","36","41","42","44","45","46","70","72","90","91","121","161","243","350","507","509","510","97","1","2","3","4","5","10","180","190","200","98","34","400","99","20","30","32","220","280","282","402","403","404","449","513","Total Presupuesto de General de Gastos de la Administración Pública (Administración Central +Administración Descentralizada)"],["Gabinete de Gobernabilidad","Secretaría de Estado en los Despachos de Gobernación, Justicia, y Descentralización (SEGOB)","Empresa Nacional de Artes Gráficas (ENAG)","Secretaría de Estado en los Despachos de Relaciones Exteriores y Cooperación Internacional (SEREXT)","Secretaría de Estado en el Despacho de Derechos Humanos (SDH)","Comisión Interinstitucional Contra la Explotación Sexual Comercial y Trata de Personas (CICESCT)","Instituto Nacional Agrario","Instituto Hondureño de Antropología e Historia","Comité Nacional de Prevención Contra Tortura, Tratos Crueles, Inhumanos y Degradantes","Gabinete Social","Instituto Nacional de la Juventud (INJ)","Secretaría de Estado en el Despacho de Educación (SEDUC)","Secretaría de Estado en el Despacho de Salud (SESAL)","Agencia de Regulación Sanitaria (ARSA)","Secretaría de Estado en los Despachos de Desarrollo e Inclusión Social (SEDIS)","Dirección de la Niñez, Adolescencia y Familia (DINAF)","Dirección Nacional del Programa Ciudad Mujer (PCM)","Instituto de Crédito Educativo (EDUCREDITO);","Patronato Nacional de la Infancia (PANI);","Instituto Nacional de la Mujer (INAM)","Universidad Nacional de Ciencias Forestales (UNACIFOR)","Universidad Nacional Autónoma de Honduras (UNAH);","Universidad Pedagógica Nacional Francisco Morazán (UPNFM);","Universidad Nacional de Agricultura (UNA)","Hospital Escuela","Gabinete Económico","Instituto Nacional de Conservación y Desarrollo Forestal, Áreas Protegidas y Vida Silvestre (ICF).","Instituto Hondureño de Geología y Minas (INHGEOMIN)","Servicio de Administración de Rentas (SAR)","Servicio Nacional de Emprendimiento y Pequeños Negocios (SENPRENDE)","Centro Nacional de Educación para el Trabajo (CENET)","Secretaría de Estado en el Despacho de Finanzas (SEFIN)","Comisión Administradora Zona Libre Turística Islas de la Bahía ZOLITUR)","Dirección Nacional de Bienes del Estado (DNBE)","Secretaría de Estado en los Despachos de Trabajo y Seguridad Social (SETRASS)","Secretaría de Estado en los Despachos de Agricultura y Ganadería (SAG)","Dirección de Ciencia y Tecnologia Agropecuaria (DICTA)","Servicio Nacional de Sanidad e Inocuidad Agroalimentaria (SENASA)","Secretaría de Estado en los Despachos de Recursos Naturales y Ambiente (MI AMBIENTE)","Secretaría de Estado en el Despacho de Turismo (SETUR)","Secretaría de Estado en el Despacho de Desarrollo Económico (SDE)","Secretaría de Estado en el Despacho de Energía (SEN)","Instituto Hondureño de Turismo (IHT)","Instituto de Formación Profesional (INFOP);","Consejo Nacional Supervisor de Cooperativas (CONSUCOOP);","Comisión para la Defensa y Promoción de la Competencia (CDPC)","Instituto Hondureño de Ciencias, Tecnología y la Innovación (IHCIETI);","Instituto Hondureño de Seguridad Social (IHSS);","Instituto de Jubilaciones y Pensiones de los Empleados del Poder Ejecutivo (INJUPEMP);","Instituto de Previsión del Magisterio (INPREMA);","Instituto de Previsión Militar (IPM);","Instituto de Previsión Social de los Empleados de la Universidad Nacional Autónoma de Honduras (INPREUNAH)","Instituto Hondureño de Mercadeo Agrícola (IHMA);","Suplidora Nacional de Productos Básicos (BANASUPRO);","Banco Hondureño de la Producción y Vivienda (BANHPROVI);","Banco Central de Honduras (BCH);","Banco Nacional de Desarrollo Agrícola (BANADESA);","Comisión Nacional de Bancos y Seguros (CNBS);","Gabinete de Infraestructura, Servicios y Empresas Publicas","Fondo Hondureño de Inversión Social (FHIS)","Inversion Estrategica de Honduras (INVEST-H)","Comisión Nacional de Vivienda y Asentamientos Humanos (CONVIVIENDA)","Ente Regulador de los Servicios de Agua Potable y Saneamiento (ERSAPS)","Secretaría de Estado en los Despachos de Infraestructura y Servicios Públicos (INSEP)","Instituto Hondureño de Transporte Terrestre (IHTT)","Programa Nacional de Desarrollo Rural  y Urbano Sostenible (PRONADERS)","Comisión Reguladora de Energía Eléctrica (CREE)","Instituto de Desarrollo Comunitario, Agua y Saneamiento (IDECOAS)","Empresa Nacional de Energía Eléctrica (ENEE)","Empresa Nacional Portuaria (ENP)","Empresa Hondureña de Telecomunicaciones (HONDUTEL)","Servicio Nacional de Agua y Alcantarillado (SANAA)","Ferrocarril Nacional de Honduras (FNH)","Empresa de Correos de Honduras (HONDUCOR)","Gabinete de Prevención, Seguridad y Defensa","Programa Nacional de Prevención, Rehabilitación y Reinserción Social (PNPRRS)","Dirección Ejecutiva de Cultura, Artes y Deportes (DECAD)","Comité Permanente de Contingencias (COPECO);","Cuerpo de Bomberos  de Honduras (CBH)","Instituto Nacional Penitenciario (INP)","Instituto Nacional de Migración (INM)","Instituto Nacional para la Atención a Menores Infractores (INAMI)","Secretaría de Estado en el Despacho de Seguridad (SESEGU)","Dirección de Asuntos Disciplinarios Policiales (DIDADPOL)","Secretaría de Estado en el Despacho de Defensa (SEDENA)","Agencia Hondureña de Aeronáutica Civil (AHAC)","Dirección General de la Marina Mercante (MARMER)","Centro de la Cultura Garinagu de Honduras (GARINAGU)","Dirección Nacional de Parques y Recreación (DNPR)","Gabinete de Prevención, Seguridad y Defensa (GPSD)","Instituto Hondureño para la Prevención del Alcoholismo, Drogadicción y Farmacodependencia (IHADFA)","Comisión Nacional Pro-Instalaciones Deportivas y Mejoramiento del Deporte (CONAPID)","Confederación Deportiva Autónoma de Honduras (CONDEPAH)","Entes que no forman parte del Poder Ejecutivo","Congreso Nacional (CN)","Tribunal Superior de Cuentas (TSC)","Comisionado Nacional de Derechos Humanos (CONADEH)","Consejo Nacional Electoral (CNE)","Tribunal de Justicia Electoral (TJE)","Poder Judicial (PJUD)","Registro Nacional de las Personas (RNP)","Ministerio Público (MP)","Procuraduría General de la República (PGR)","Entes con Adscripción a la Secretaría de la Presidencia","Despacho Ministerial de Socialización y Acompañamiento Digital de los Proyectos Presidenciales (DMSADPP)","Administración Aduanera de Honduras (AAH)","Entes sin Adscripción a un Gabinete","Presidencia de la República (PREREP)","Secretaría de Estado en el Despacho de la Presidencia (SEPRE)","Instituto de Acceso a la Información Pública (IAIP)","Deuda Pública (DEPU)","Secretaría de Coordinación General del Gobierno (SCGG)","Escuela de Alta Gerencia Pública (EAG)","Agencia Estratégica de Proyectos Productivos Ambientales y Sociales de Honduras  (AEPAS-H)","Secretaría de transparencia  (SDT)","Dirección General de Cinematografía","Servicios Financieros de la Administración Central (SFAC)","Instituto Nacional de Estadística",null],[8370546097,6753792699,96303764,1009534950,88797925,6741800,345308208,57687348,12379403,61819920840,14152597,32234886009,18218439532,110441277,2338389067,135981999,83150047,18634953,693338938,43115331,134601901,4966210886,605120927,495757094,1727700282,89016012768,431872577,68175166,1023150736,258527502,16595953,6480954412,50928974,21740855,582145663,1950293199,84667443,203737016,234031465,182292914,199828893,109776710,174976471,1092265449,56800267,37552410,56560541,12890170437,11664655700,24317723757,9250935000,1785718240,183867556,911227466,5899573001,7593569039,516683178,685014778,51160596484,1790135080,4596302320,354366929,13474420,3056422408,178401948,732726351,98930000,148803989,36279644106,1172698888,1417085890,1028712297,15414241,129745382,19081902511,7530169,190391692,564395534,369678398,1200698724,519715217,15827540,6970580428,45405615,8464949206,246909663,103551206,10447914,35725655,245024462,18261425,48559949,24249714,9201166643,1208000000,460620906,83469126,150445331,95263380,2724882804,824273488,2105475158,194728650,835951641,58240095,777711546,49385020131,981327779,765019174,35796606,39952496903,265052779,10000000,577421784,null,null,6713998197,83906909,288871117115],[8094752143,6470026503,75000799,1036247330,96130113,7131063,346058208,50898434,13259693,66157841289,15219798,33553156066,20976532416,123454032,1783493668,181630621,117688346,18634953,734523250,43388673,135385241,5155799701,668889366,526136145,2123909013,85467179297,425684226,88998729,855790357,259088659,16585730,5243029700,55273150,21740855,320445098,2077573096,83667443,210505427,235694030,154438470,224402526,123429232,146813892,1130161575,82564043,38628044,56560541,14674574283,11865659000,23473000000,9599003980,1773438666,187196116,899223063,3172398602,6622484434,458654098,742739997,56243341203,2029084691,6518055813,354366929,15864234,2677666719,174511284,455746893,81500000,144589768,40151146272,1225255400,1363558912,892949244,15883869,143161175,19942198227,8200187,204365646,593133965,374122572,1201238991,565194470,15827540,6854651535,45447104,9336149156,253078058,105322884,10447914,35747269,245024462,21284645,48712115,24249714,7932953620,1208000000,491930672,83469126,299160757,65969926,2746120035,644330263,2197475158,196497683,983925698,59332318,924593380,62460611596,889582370,811661181,37183423,52811997954,342337674,20000000,1339872887,100989832,40000000,5981724416,85261859,308233603073],[-275793954,-283766196,-21302965,26712380,7332188,389263,750000,-6788914,880290,4337920449,1067201,1318270057,2758092884,13012755,-554895399,45648622,34538299,0,41184312,273342,783340,189588815,63768439,30379051,396208731,-3548833471,-6188351,20823563,-167360379,561157,-10223,-1237924712,4344176,0,-261700565,127279897,-1000000,6768411,1662565,-27854444,24573633,13652522,-28162579,37896126,25763776,1075634,0,1784403846,201003300,-844723757,348068980,-12279574,3328560,-12004403,-2727174399,-971084605,-58029080,57725219,5082744719,238949611,1921753493,0,2389814,-378755689,-3890664,-276979458,-17430000,-4214221,3871502166,52556512,-53526978,-135763053,469628,13415793,860295716,670018,13973954,28738431,4444174,540267,45479253,0,-115928893,41489,871199950,6168395,1771678,0,21614,0,3023220,152166,0,-1268213023,0,31309766,0,148715426,-29293454,21237231,-179943225,92000000,1769033,147974057,1092223,146881834,13075591465,-91745409,46642007,1386817,12859501051,77284895,10000000,762451103,100989832,40000000,-732273781,1354950,19362485958],[-0.0329481435027094,-0.0420158285346862,-0.221205943726146,0.0264600844180778,0.082571614145263,0.0577387344626064,0.0021719726975038,-0.1176846264453,0.0711092449288548,0.0701702685810168,0.0754067257055366,0.0408957567472688,0.15139018241137,0.117825104467055,-0.237298149752254,0.335696065182863,0.4153731747139,0,0.0593999698312053,0.00633978665268731,0.00581968006529121,0.0381757479398348,0.105381314964835,0.0612780964058177,0.229327236400833,-0.039867360496692,-0.014329113098561,0.305442057889525,-0.163573531358922,0.00217058918551727,-0.000615993549752725,-0.191009631190722,0.0852987142446655,0,-0.449544816071231,0.0652619293679852,-0.0118109153243237,0.0332213121252349,0.00710402338420613,-0.15280047583199,0.122973373024691,0.124366288623516,-0.1609506629037,0.0346949782534045,0.453585473462651,0.0286435411202637,0,0.138431361689217,0.0172318245106884,-0.0347369583370993,0.0376252757153737,-0.00687654621257605,0.0181030306401637,-0.0131738818768222,-0.462266404456345,-0.127882501629021,-0.112310759225066,0.0842685747138727,0.0993488166344891,0.133481329799984,0.418108592343421,0,0.177359322330757,-0.123921251201611,-0.0218084165762584,-0.378012142762421,-0.176185181441423,-0.0283206184748179,0.106712793396993,0.0448167151327596,-0.0377725714282569,-0.131973782558954,0.0304671504746812,0.10340092875136,0.0450843785363682,0.0889778170981288,0.0733958181326526,0.050918955357999,0.012021730304079,0.000449960501498703,0.0875080265352324,0,-0.0166311678342205,0.000913741615436781,0.102918508876874,0.0249823960919666,0.0171091971637685,0,0.000604999404489659,0,0.165552250166676,0.0031335700126045,0,-0.137831763319364,0,0.0679729590910056,0,0.988501437774762,-0.307499628923517,0.00779381446013927,-0.218305244096362,0.0436955998509103,0.00908460568077674,0.177012699948752,0.0187537983926709,0.188864155039817,0.264768373695411,-0.0934910953947428,0.0609684156752912,0.0387415779026647,0.321869771549482,0.291583039768845,1,1.32044048930444,0,0,-0.109066722914403,0.0161482530598285,0.0670281132685611]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Cod.<\/th>\n      <th>Nombre de Gabinete / Institución<\/th>\n      <th>Presupuesto 2021<\/th>\n      <th>Presupuesto 2022<\/th>\n      <th>Diferencias Absolutas<\/th>\n      <th>Relativa<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":6,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatPercentage(data, 2, 3, \",\", \".\");\n  }"},{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\");\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\");\n  }"},{"targets":5,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\");\n  }"},{"className":"dt-right","targets":[3,4,5,6]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render"],"jsHooks":[]}</script>
+<p>Proyecto de Presupuesto 2022 por Fuente de Financiamiento</p>
+<div id="htmlwidget-8772d5782cb6d38943ee" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8772d5782cb6d38943ee">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124"],["1","40","43","80","300","301","500","505","516","2","26","50","60","62","240","242","244","504","508","512","511","701","702","703","708","3","28","35","37","39","51","100","101","102","104","130","140","141","145","150","170","290","310","501","503","506","514","515","601","602","603","604","605","806","807","901","902","903","950","4","22","31","33","61","120","123","144","153","241","801","803","804","805","808","809","5","25","36","41","42","44","45","46","70","72","90","91","121","161","243","350","507","509","510","97","1","2","3","4","5","10","180","190","200","98","34","400","99","20","30","32","220","280","282","402","403","404","449","513",null,"Subtotal Gabinetes",null,"Subtotal Fuera de Gabinetes","Total Presupuesto de General de Gastos de la Administración Pública (Administración Central +Administración Descentralizada)"],["Gabinete de Gobernabilidad","Secretaría de Estado en los Despachos de Gobernación, Justicia, y Descentralización (SEGOB)","Empresa Nacional de Artes Gráficas (ENAG)","Secretaría de Estado en los Despachos de Relaciones Exteriores y Cooperación Internacional (SEREXT)","Secretaría de Estado en el Despacho de Derechos Humanos (SDH)","Comisión Interinstitucional Contra la Explotación Sexual Comercial y Trata de Personas (CICESCT)","Instituto Nacional Agrario","Instituto Hondureño de Antropología e Historia","Comité Nacional de Prevención Contra Tortura, Tratos Crueles, Inhumanos y Degradantes","Gabinete Social","Instituto Nacional de la Juventud (INJ)","Secretaría de Estado en el Despacho de Educación (SEDUC)","Secretaría de Estado en el Despacho de Salud (SESAL)","Agencia de Regulación Sanitaria (ARSA)","Secretaría de Estado en los Despachos de Desarrollo e Inclusión Social (SEDIS)","Dirección de la Niñez, Adolescencia y Familia (DINAF)","Dirección Nacional del Programa Ciudad Mujer (PCM)","Instituto de Crédito Educativo (EDUCREDITO);","Patronato Nacional de la Infancia (PANI);","Instituto Nacional de la Mujer (INAM)","Universidad Nacional de Ciencias Forestales (UNACIFOR)","Universidad Nacional Autónoma de Honduras (UNAH);","Universidad Pedagógica Nacional Francisco Morazán (UPNFM);","Universidad Nacional de Agricultura (UNA)","Hospital Escuela","Gabinete Económico","Instituto Nacional de Conservación y Desarrollo Forestal, Áreas Protegidas y Vida Silvestre (ICF).","Instituto Hondureño de Geología y Minas (INHGEOMIN)","Servicio de Administración de Rentas (SAR)","Servicio Nacional de Emprendimiento y Pequeños Negocios (SENPRENDE)","Centro Nacional de Educación para el Trabajo (CENET)","Secretaría de Estado en el Despacho de Finanzas (SEFIN)","Comisión Nacional de Telecomunicaciones (CONATEL)","Comisión Administradora Zona Libre Turística Islas de la Bahía ZOLITUR)","Dirección Nacional de Bienes del Estado (DNBE)","Secretaría de Estado en los Despachos de Trabajo y Seguridad Social (SETRASS)","Secretaría de Estado en los Despachos de Agricultura y Ganadería (SAG)","Dirección de Ciencia y Tecnologia Agropecuaria (DICTA)","Servicio Nacional de Sanidad e Inocuidad Agroalimentaria (SENASA)","Secretaría de Estado en los Despachos de Recursos Naturales y Ambiente (MI AMBIENTE)","Secretaría de Estado en el Despacho de Turismo (SETUR)","Secretaría de Estado en el Despacho de Desarrollo Económico (SDE)","Secretaría de Estado en el Despacho de Energía (SEN)","Instituto Hondureño de Turismo (IHT)","Instituto de Formación Profesional (INFOP);","Consejo Nacional Supervisor de Cooperativas (CONSUCOOP);","Comisión para la Defensa y Promoción de la Competencia (CDPC)","Instituto Hondureño de Ciencias, Tecnología y la Innovación (IHCIETI);","Instituto Hondureño de Seguridad Social (IHSS);","Instituto de Jubilaciones y Pensiones de los Empleados del Poder Ejecutivo (INJUPEMP);","Instituto de Previsión del Magisterio (INPREMA);","Instituto de Previsión Militar (IPM);","Instituto de Previsión Social de los Empleados de la Universidad Nacional Autónoma de Honduras (INPREUNAH)","Instituto Hondureño de Mercadeo Agrícola (IHMA);","Suplidora Nacional de Productos Básicos (BANASUPRO);","Banco Hondureño de la Producción y Vivienda (BANHPROVI);","Banco Central de Honduras (BCH);","Banco Nacional de Desarrollo Agrícola (BANADESA);","Comisión Nacional de Bancos y Seguros (CNBS);","Gabinete de Infraestructura, Servicios y Empresas Publicas","Fondo Hondureño de Inversión Social (FHIS)","Inversion Estrategica de Honduras (INVEST-H)","Comisión Nacional de Vivienda y Asentamientos Humanos (CONVIVIENDA)","Ente Regulador de los Servicios de Agua Potable y Saneamiento (ERSAPS)","Secretaría de Estado en los Despachos de Infraestructura y Servicios Públicos (INSEP)","Instituto Hondureño de Transporte Terrestre (IHTT)","Programa Nacional de Desarrollo Rural  y Urbano Sostenible (PRONADERS)","Comisión Reguladora de Energía Eléctrica (CREE)","Instituto de Desarrollo Comunitario, Agua y Saneamiento (IDECOAS)","Empresa Nacional de Energía Eléctrica (ENEE)","Empresa Nacional Portuaria (ENP)","Empresa Hondureña de Telecomunicaciones (HONDUTEL)","Servicio Nacional de Agua y Alcantarillado (SANAA)","Ferrocarril Nacional de Honduras (FNH)","Empresa de Correos de Honduras (HONDUCOR)","Gabinete de Prevención, Seguridad y Defensa","Programa Nacional de Prevención, Rehabilitación y Reinserción Social (PNPRRS)","Dirección Ejecutiva de Cultura, Artes y Deportes (DECAD)","Comité Permanente de Contingencias (COPECO);","Cuerpo de Bomberos  de Honduras (CBH)","Instituto Nacional Penitenciario (INP)","Instituto Nacional de Migración (INM)","Instituto Nacional para la Atención a Menores Infractores (INAMI)","Secretaría de Estado en el Despacho de Seguridad (SESEGU)","Dirección de Asuntos Disciplinarios Policiales (DIDADPOL)","Secretaría de Estado en el Despacho de Defensa (SEDENA)","Agencia Hondureña de Aeronáutica Civil (AHAC)","Dirección General de la Marina Mercante (MARMER)","Centro de la Cultura Garinagu de Honduras (GARINAGU)","Dirección Nacional de Parques y Recreación (DNPR)","Gabinete de Prevención, Seguridad y Defensa (GPSD)","Instituto Hondureño para la Prevención del Alcoholismo, Drogadicción y Farmacodependencia (IHADFA)","Comisión Nacional Pro-Instalaciones Deportivas y Mejoramiento del Deporte (CONAPID)","Confederación Deportiva Autónoma de Honduras (CONDEPAH)","Entes que no forman parte del Poder Ejecutivo","Congreso Nacional (CN)","Tribunal Superior de Cuentas (TSC)","Comisionado Nacional de Derechos Humanos (CONADEH)","Consejo Nacional Electoral (CNE)","Tribunal de Justicia Electoral (TJE)","Poder Judicial (PJUD)","Registro Nacional de las Personas (RNP)","Ministerio Público (MP)","Procuraduría General de la República (PGR)","Entes con Adscripción a la Secretaría de la Presidencia","Despacho Ministerial de Socialización y Acompañamiento Digital de los Proyectos Presidenciales (DMSADPP)","Administración Aduanera de Honduras (AAH)","Entes sin Adscripción a un Gabinete","Presidencia de la República (PREREP)","Secretaría de Estado en el Despacho de la Presidencia (SEPRE)","Instituto de Acceso a la Información Pública (IAIP)","Deuda Pública (DEPU)","Secretaría de Coordinación General del Gobierno (SCGG)","Escuela de Alta Gerencia Pública (EAG)","Agencia Estratégica de Proyectos Productivos Ambientales y Sociales de Honduras  (AEPAS-H)","Secretaría de transparencia  (SDT)","Dirección General de Cinematografía","Servicios Financieros de la Administración Central (SFAC)","Instituto Nacional de Estadística",null,null,null,null,null],["7,875,025,613","6,465,693,491","-","940,278,313","96,130,113","7,131,063","319,558,208","32,974,732","13,259,693","61,457,269,180","15,219,798","31,979,728,899","19,636,496,896","-","1,345,563,695","181,630,621","91,940,748","-","-","43,388,673","113,987,701","4,869,152,101","628,889,366","480,596,019","2,070,674,663","7,386,075,004","335,436,214","30,285,906","695,081,464","259,088,659","16,585,730","2,892,109,993","147,732,235","-","21,740,855","319,872,898","1,460,767,287","83,167,443","77,269,092","190,000,910","154,438,470","218,155,493","115,826,232","145,901,642","1,188,950","18,558,871","25,385,544","56,560,541","8,068,000","-","4,369,309","91,225,000","-","2,789,000","6,337,450","8,131,816","-","-","-","8,936,781,562","295,053,215","5,053,122,666","354,366,929","9,311,925","2,522,516,484","132,218,915","455,746,893","-","34,985,696","-","-","-","1,519,564","3,055,615","74,883,660","19,042,790,599","8,200,187","203,963,143","593,133,965","293,794,592","1,201,238,991","565,194,470","15,827,540","6,144,871,777","45,447,104","9,307,217,999","240,471,314","55,297,884","10,447,914","35,747,269","245,024,462","18,291,245","34,371,029","24,249,714","7,624,502,331","1,208,000,000","407,720,906","83,469,126","299,160,757","65,969,926","2,630,296,306","584,235,022","2,197,475,158","148,175,130","748,054,658","59,332,318","688,722,340","50,191,220,356","889,582,370","811,661,181","37,183,423","41,888,411,671","342,337,674","20,000,000","-","100,989,832","40,000,000","5,980,523,262","80,530,943","104,697,941,958",null,"58,563,777,345",null,"163,261,719,303"],["219,726,530","4,333,012","75,000,799","95,969,017","-","-","26,500,000","17,923,702","-","1,373,016,054","-","4,475,615","81,020,698","123,454,032","-","-","-","18,634,953","734,523,250","-","21,397,540","286,647,600","40,000,000","45,540,126","17,322,240","74,907,757,659","18,733,564","58,712,823","14,388,646","-","-","-","-","55,273,150","-","72.2","12,713,577","500","133,236,335","45,693,120","-","6,247,033","7,603,000","912.25","1,128,972,625","64,005,172","13,242,500","-","14,666,506,283","11,865,659,000","23,468,630,691","9,507,778,980","1,773,438,666","184,407,116","892,885,613","3,164,266,786","6,622,484,434","458,654,098","742,739,997","38,672,669,300","-","-","-","6,552,309","37.368000000000002","42,292,369","-","81,500,000","-","34,980,937,493","1,225,255,400","1,363,558,912","891,429,680","12,828,254","68,277,515","654,507,870","-","402.50299999999999","-","80,327,980","-","-","-","464,880,000","-","28,931,157","12,606,744","50,025,000","-","-","-","2,993,400","14,341,086","-","308,451,289","-","84,209,766","-","-","-","115,823,729","60,095,241","-","48,322,553","235,871,040","-","235,871,040","4,730,916","-","-","-","-","-","-","-","-","-","-","4,730,916","115,827,677,413",null,"549,053,245",null,"116,376,730,658"],["-","-","-","-","-","-","-","-","-","950,800,000","-","-","950,800,000","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","3,166,620,469","-","-","-","-","-","-","-","-","-","3,166,620,469",null,null,null,null,null,"-",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"-",null,null,null,null,null,null,null,null,null,"-",null,null,"-",null,null,null,null,null,null,null,null,null,null,null,"4,117,420,469",null,"-",null,"4,117,420,469"],["-","-","-","-","-","-","-","-","-","3,327,556,055","-","1,568,951,552","1,259,014,822","-","437,929,973","-","25,747,598","-","-","-","-","-","-","-","35,912,110","3,173,346,634","71,514,448","-","146,320,247","-","-","2,350,919,707","-","-","-","500","604,092,232","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","5,467,269,872","1,734,031,476","1,464,933,147","-","-","155,112,867","-","-","-","109,604,072","2,003,588,310","-","-","-","-","-","244,899,758","-","-","-","-","-","-","-","244,899,758","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","12,264,660,324","-","-","-","10,923,586,283","-","-","1,339,872,887","-","-","1,201,154","-","12,213,072,319",null,"12,264,660,324",null,"24,477,732,643"],["8,094,752,143","6,470,026,503","75,000,799","1,036,247,330","96,130,113","7,131,063","346,058,208","50,898,434","13,259,693","66,157,841,289","15,219,798","33,553,156,066","20,976,532,416","123,454,032","1,783,493,668","181,630,621","117,688,346","18,634,953","734,523,250","43,388,673","135,385,241","5,155,799,701","668,889,366","526,136,145","2,123,909,013","85,467,179,297","425,684,226","88,998,729","855,790,357","259,088,659","16,585,730","5,243,029,700",null,"55,273,150","21,740,855","320,445,098","2,077,573,096","83,667,443","210,505,427","235,694,030","154,438,470","224,402,526","123,429,232","146,813,892","1,130,161,575","82,564,043","38,628,044","56,560,541","14,674,574,283","11,865,659,000","23,473,000,000","9,599,003,980","1,773,438,666","187,196,116","899,223,063","3,172,398,602","6,622,484,434","458,654,098","742,739,997","56,243,341,203","2,029,084,691","6,518,055,813","354,366,929","15,864,234","2,677,666,719","174,511,284","455,746,893","81,500,000","144,589,768","40,151,146,272","1,225,255,400","1,363,558,912","892,949,244","15,883,869","143,161,175","19,942,198,227","8,200,187","204,365,646","593,133,965","374,122,572","1,201,238,991","565,194,470","15,827,540","6,854,651,535","45,447,104","9,336,149,156","253,078,058","105,322,884","10,447,914","35,747,269","245,024,462","21,284,645","48,712,115","24,249,714","7,932,953,620","1,208,000,000","491,930,672","83,469,126","299,160,757","65,969,926","2,746,120,035","644,330,263","2,197,475,158","196,497,683","983,925,698","59,332,318","924,593,380","62,460,611,596","889,582,370","811,661,181","37,183,423","52,811,997,954","342,337,674","20,000,000","1,339,872,887","100,989,832","40,000,000","5,981,724,416","85,261,859","236,856,112,159",null,"71,377,490,914",null,"308,233,603,073"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Cod.<\/th>\n      <th>Nombre de Gabinete / Institución<\/th>\n      <th>Tesoro Nacional<\/th>\n      <th>Recursos Propios<\/th>\n      <th>Crédito Interno<\/th>\n      <th>Fuentes Externas<\/th>\n      <th>Total Fuentes<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+<hr />
+<p>Este dashboard y el espacio es una donación de <a href="https://datascience-machinelearning-solutions.github.io/homepage-ho.github.io/">DataScience &amp; Machine Learning Solutions.</a> Creamos y donamos estas apps, contáctanos.</p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

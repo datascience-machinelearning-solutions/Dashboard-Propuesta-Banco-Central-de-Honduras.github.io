@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="DataScience &amp; Machine Learning Solutions" />
+
+
+<title>Inflación</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.9.4.1/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.18/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Propuesta para el Banco Central de Honduras</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Presentación</a>
+</li>
+<li>
+  <a href="sector_real.html">PIB Enfoque VA</a>
+</li>
+<li>
+  <a href="Enfoque_gasto.html">PIB Enfoque Gasto</a>
+</li>
+<li>
+  <a href="Inflacion.html">Inflación e IPC</a>
+</li>
+<li>
+  <a href="BP.html">Balanza de Pagos</a>
+</li>
+<li>
+  <a href="principales_ind.html">Principales Indicadores Fiscales</a>
+</li>
+<li>
+  <a href="Deuda.html">Deuda</a>
+</li>
+<li>
+  <a href="Impuestos_trib.html">Impuestos Tributarios</a>
+</li>
+<li>
+  <a href="Tablas.html">Presupuesto Comparativo</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Inflación</h1>
+<h4 class="author">DataScience &amp; Machine Learning Solutions</h4>
+
+</div>
+
+
+<div id="htmlwidget-e7ff3945bf416ca99698" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e7ff3945bf416ca99698">{"x":{"visdat":{"1cac6ec21d84":["function () ","plotlyVisDat"]},"cur_data":"1cac6ec21d84","attrs":{"1cac6ec21d84":{"x":["2018-2017","2019-12018","2020-2019","2021 Proyectada"],"y":["4.2199999999999998","4.04","4.0099999999999998","4% +/- 1.0 pp"],"mode":"lines+markers","name":"Inflación Interanual","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"yaxis":{"domain":[0,1],"automargin":true,"title":"%","type":"category","categoryorder":"array","categoryarray":["4% +/- 1.0 pp","4.0099999999999998","4.04","4.2199999999999998"]},"barmode":"group","title":"Inflación Interanual 2018-2020","legend":{"orientation":"h","x":"bottomright","x.1":0.5},"xaxis":{"domain":[0,1],"automargin":true,"title":[],"type":"category","categoryorder":"array","categoryarray":["2018-2017","2019-12018","2020-2019","2021 Proyectada"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2018-2017","2019-12018","2020-2019","2021 Proyectada"],"y":["4.2199999999999998","4.04","4.0099999999999998","4% +/- 1.0 pp"],"mode":"lines+markers","name":"Inflación Interanual","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>Cuadro de Inflación Interanual 2018-2020</p>
+<div id="htmlwidget-1e5738c421b9afcc737a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1e5738c421b9afcc737a">{"x":{"filter":"none","data":[["1","2","3","4"],["2018-2017","2019-12018","2020-2019","2021 Proyectada"],["4.2199999999999998","4.04","4.0099999999999998","4% +/- 1.0 pp"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Periodo<\/th>\n      <th>Inflación Interanual<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+<p>Cuadro de IPC 2018-2021</p>
+<p>Cuadro de Inflación Interanual 2018-2020</p>
+<pre><code>## New names:
+## * `` -&gt; ...7
+## * `` -&gt; ...8
+## * `` -&gt; ...9
+## * `` -&gt; ...10
+## * `` -&gt; ...11
+## * ...</code></pre>
+<div id="htmlwidget-93f86bb3578fb74e316f" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-93f86bb3578fb74e316f">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14"],[null,null,"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],[null,null,311,313,314.1,314.8,315.1,316.4,317.6,319,319.1,320.9,322.6,323.2],[null,null,323.3,325.8,327.1,330.1,331.3,331.6,332.5,332.7,333.2,334,335,336.4],[null,null,337.2,338.8,339.8,341.1,338.9,340.4,342.8,343.4,344.5,346.2,347.8,349.9],[null,null,351.3,351.9,353.2,354.6,355.3,356.3,357.4,358.8,360.4,null,null,null],["Mensual 1/","2018","0.28999999999999998","0.64000000000000001","0.34999999999999998","0.22","0.10000000000000001","0.40999999999999998","0.38","0.44","0.029999999999999999","0.56000000000000005","0.53000000000000003","0.19"],[null,2019,0.03,0.77,0.4,0.92,0.36,0.09,0.27,0.06,0.15,0.24,0.3,0.42],[null,2020,0.24,0.47,0.3,0.38,-0.64,0.44,0.71,0.18,0.32,0.49,0.46,0.6],[null,2021,0.4,0.17,0.37,0.4,0.2,0.28,0.31,0.39,0.45,null,null,null],["Interanual","2018/17","4.5700000000000003","4.3300000000000001","4.3499999999999996","4.2000000000000002","3.9900000000000002","4.1500000000000004","4.2300000000000004","4.3499999999999996","4.3799999999999999","4.6600000000000001","4.71","4.2199999999999998"],[null,"2019/18","3.9500000000000002","4.0899999999999999","4.1399999999999997","4.8600000000000003","5.1399999999999997","4.7999999999999998","4.6900000000000004","4.29","4.4199999999999999","4.0800000000000001","3.8399999999999999","4.0800000000000001"],[null,"2020/19","4.2999999999999998","3.9900000000000002","3.8799999999999999","3.3300000000000001","2.29","2.6499999999999999","3.1000000000000001","3.2200000000000002","3.3900000000000001","3.6499999999999999","3.8199999999999998","4.0099999999999998"],[null,"2021/20","4.1799999999999997","3.8700000000000001","3.9399999999999999","3.96","4.8399999999999999","4.6699999999999999","4.2599999999999998","4.4800000000000004","4.6200000000000001",null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Meses<\/th>\n      <th>2018<\/th>\n      <th>2019<\/th>\n      <th>2020<\/th>\n      <th>2021<\/th>\n      <th>Variación Porcentual<\/th>\n      <th>...7<\/th>\n      <th>...8<\/th>\n      <th>...9<\/th>\n      <th>...10<\/th>\n      <th>...11<\/th>\n      <th>...12<\/th>\n      <th>...13<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,7,8,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<hr />
+<p>Este dashboard y el espacio es una donación de <a href="https://datascience-machinelearning-solutions.github.io/homepage-ho.github.io/index.html">DataScience &amp; Machine Learning Solutions</a>. Creamos y donamos estas apps, contáctanos.</p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
